@@ -1356,8 +1356,8 @@ function initCountryPanel() {
   createFigure(humImpactDiv, {className: 'returnees', title: 'Estimated Number of Returnees', stat: shortenNumFormat(data['#affected+returnees+ind']), indicator: '#affected+returnees+ind'});
   createFigure(humImpactDiv, {className: 'people-reached', title: 'People reached within Ukraine (total)', stat: shortenNumFormat(data['#reached+ind']), indicator: '#reached+ind'});
   createFigure(humImpactDiv, {className: 'orgs', title: 'Humanitarian orgs present within Ukraine (total)', stat: numFormat(data['#org+count+num']), indicator: '#org+count+num'});
-  createFigure(humImpactDiv, {className: 'attacks-health', title: 'Attacks on Health Care', stat: numFormat(data['#indicator+attacks+healthcare+num']), indicator: '#indicator+attacks+healthcare+num'});
-  createFigure(humImpactDiv, {className: 'attacks-education', title: 'Attacks on Education Facilities', stat: numFormat(data['#indicator+attacks+education+num']), indicator: '#indicator+attacks+education+num'});
+  // createFigure(humImpactDiv, {className: 'attacks-health', title: 'Attacks on Health Care', stat: numFormat(data['#indicator+attacks+healthcare+num']), indicator: '#indicator+attacks+healthcare+num'});
+  // createFigure(humImpactDiv, {className: 'attacks-education', title: 'Attacks on Education Facilities', stat: numFormat(data['#indicator+attacks+education+num']), indicator: '#indicator+attacks+education+num'});
 
   //refugee sparkline
   var sparklineArray = [];
