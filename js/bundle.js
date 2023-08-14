@@ -1267,7 +1267,7 @@ function createCountryMapTooltip(adm1_name, adm1_pcode, point) {
     let content = '';
     if (val!='No Data' && currentCountryIndicator.id=='#org+count+num') {
       //humanitarian presence layer
-      let sectors = adm1[0]['#sector+cluster+names'].split(',').sort();
+      let sectors = adm1[0]['#sector+cluster+names'].split(';').sort();
       content = `<h2>${adm1_name} Oblast</h2>`;
       content += `<div class="table-display layer-orgs">`;
       content += `<div class="table-row"><div>People reached:</div><div>${numFormat(adm1[0]['#reached+ind'])}</div></div>`;
