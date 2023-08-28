@@ -1232,7 +1232,7 @@ label.label-small {
     display: flex;
     justify-content: space-between; }
     .table-display .table-row > div:first-child {
-      padding-right: 20px; }
+      padding-right: 18px; }
     .table-display .table-row.row-separator {
       border-bottom: 1px solid #CCC;
       padding-bottom: 8px; }
@@ -1595,9 +1595,9 @@ a:visited {
         display: flex;
         gap: 5px;
         align-items: center; }
-    .country-panel .figure.refugees .figure-inner .title, .country-panel .figure.idps .figure-inner .title {
+    .country-panel .figure.refugees .figure-inner .title, .country-panel .figure.returnees .figure-inner .title {
       height: 56px; }
-    .country-panel .figure.casualties-killed .source {
+    .country-panel .figure.refugees .source, .country-panel .figure.idps .source, .country-panel .figure.orgs .source {
       min-height: 42px; }
   .country-panel .panel-tooltip {
     display: block;

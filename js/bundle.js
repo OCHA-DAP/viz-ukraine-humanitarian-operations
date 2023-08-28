@@ -569,7 +569,7 @@ function initCountryLayer() {
 
   initIDPLayer();
   initBorderCrossingLayer();
-  initHostilityLayer();
+  //initHostilityLayer();
   initLocationLabels();
   initAcledLayer();
   initRefugeeLayer();
@@ -1112,7 +1112,7 @@ function updateCountryLayer() {
     resetLayers();
     map.setLayoutProperty('acled-dots', 'visibility', 'visible');
     map.setLayoutProperty('border-crossings-layer', 'visibility', 'none');
-    map.setLayoutProperty('hostilities-layer', 'visibility', 'none');
+    //map.setLayoutProperty('hostilities-layer', 'visibility', 'none');
   }
   else if (currentCountryIndicator.id=='#affected+idps') {
     resetLayers();
@@ -1129,7 +1129,7 @@ function resetLayers() {
   map.setLayoutProperty(countryLayer, 'visibility', 'visible')
   map.setLayoutProperty('acled-dots', 'visibility', 'none');
   map.setLayoutProperty('border-crossings-layer', 'visibility', 'visible');
-  map.setLayoutProperty('hostilities-layer', 'visibility', 'visible');
+  //map.setLayoutProperty('hostilities-layer', 'visibility', 'visible');
   map.setLayoutProperty('macro-regions', 'visibility', 'none');
 }
 
@@ -1141,7 +1141,7 @@ function createCountryLegend(scale) {
   createSource($('.map-legend.country .acled-source'), '#date+latest+acled');
   createSource($('.map-legend.country .orgs-source'), '#org+count+num');
   createSource($('.map-legend.country .population-source'), '#population');
-  createSource($('.map-legend.country .hostilities-source'), '#event+loc');
+  //createSource($('.map-legend.country .hostilities-source'), '#event+loc');
   createSource($('.map-legend.country .health-facilities-source'), '#loc+count+health');
   createSource($('.map-legend.country .refugee-arrivals-source'), '#affected+refugees');
   createSource($('.map-legend.country .border-crossing-source'), '#geojson');
@@ -1270,10 +1270,12 @@ function createCountryMapTooltip(adm1_name, adm1_pcode, point) {
       let sectors = adm1[0]['#sector+cluster+names'].split(';').sort();
       content = `<h2>${adm1_name} Oblast</h2>`;
       content += `<div class="table-display layer-orgs">`;
-      content += `<div class="table-row"><div>People reached:</div><div>${numFormat(adm1[0]['#reached+ind'])}</div></div>`;
+      content += `<div class="table-row"><div>People Reached:</div><div>${numFormat(adm1[0]['#reached+ind'])}</div></div>`;
+      content += `<div class="table-row"><div>People Targeted:</div><div>${numFormat(adm1[0]['#targeted+total'])}</div></div>`;
       content += `<div class="table-row"><div>${label}:</div><div>${val}</div></div>`;
       content += `<div class="table-row row-separator"><div>Clusters present:</div><div>${sectors.length}</div></div>`;
       sectors.forEach(function(sector, index) {
+        sector = sector.trimStart();
         content += `<div class="table-row breakdown"><div><i class="${humIcons[sector]}"></i> ${sector}</div></div>`;
       });
       content += `</div>`;
@@ -1282,6 +1284,7 @@ function createCountryMapTooltip(adm1_name, adm1_pcode, point) {
       content = `<h2>${adm1_name} Oblast</h2>${label}:<div class="stat">${numFormat(val)}</div>`;
       content += `<div class="table-display">`;
       content += `<div class="table-row"><div>People Affected:</div><div>${numFormat(adm1[0]['#affected+total'])}</div></div>`;
+      content += `<div class="table-row"><div>People Targeted:</div><div>${numFormat(adm1[0]['#targeted+total'])}</div></div>`;
       content += `<div class="table-row"><div>IDPs in Need:</div><div>${numFormat(adm1[0]['#affected+inneed+idps'])}</div></div>`;
       content += `<div class="table-row"><div>Non-displaced People in Need:</div><div>${numFormat(adm1[0]['#affected+inneed+nondisplaced'])}</div></div>`;
       content += `<div class="table-row"><div>Returnees in Need:</div><div>${numFormat(adm1[0]['#affected+inneed+returnees'])}</div></div>`;
@@ -1341,7 +1344,8 @@ function initCountryPanel() {
 
    //black sea grain initiative key figures
   var grainDiv = $('.country-panel .grain .panel-inner');
-  createFigure(grainDiv, {className: 'voyages', title: 'Number of Outbound Voyages', stat: data['#indicator+voyages+num'], indicator: '#indicator+voyages+num'});
+  grainDiv.append('<p style="font-size: 13px;">*Data on the Black Sea Grain Initiative vessel movements covers the period 1 August 2022 - 17 July 2023. The Initiative was not renewed after its third term, which expired on 17 July 2023.</p>');
+  createFigure(grainDiv, {className: 'voyages', title: 'Number of Outbound Voyages', stat: numFormat(data['#indicator+voyages+num']), indicator: '#indicator+voyages+num'});
   createFigure(grainDiv, {className: 'tonnage', title: 'Tonnage of Commodities', stat: shortenNumFormat(data['#indicator+commodities+num']), indicator: '#indicator+commodities+num'});
   createFigure(grainDiv, {className: 'wheat', title: 'Quantity of wheat shipped to lower-income countries [?]', stat: shortenNumFormat(data['#indicator+commodities+wheat+num']), indicator: '#indicator+commodities+wheat+num', tooltip: 'The term "lower-income" refers to low-income and lower-middle-income countries.'});
   createFigure(grainDiv, {className: 'wheat-pct', title: 'Proportion of wheat shipped to lower-income countries [?]', stat: percentFormat(data['#indicator+commodities+wheat+pct']), indicator: '#indicator+commodities+wheat+pct', tooltip: 'The term "lower-income" refers to low-income and lower-middle-income countries.'});
@@ -1349,12 +1353,14 @@ function initCountryPanel() {
   //humanitarian impact key figures
   var humImpactDiv = $('.country-panel .hum-impact .panel-inner');
   createFigure(humImpactDiv, {className: 'affected', title: 'People Affected', stat: shortenNumFormat(data['#affected+total']), indicator: '#affected+total'});
+  createFigure(humImpactDiv, {className: 'targeted', title: 'People Targeted', stat: shortenNumFormat(data['#targeted+total']), indicator: '#targeted+total'});
   createFigure(humImpactDiv, {className: 'pin', title: 'People in Need', stat: shortenNumFormat(data['#affected+inneed+total']), indicator: '#affected+inneed+total'});
-  createFigure(humImpactDiv, {className: 'refugees', title: 'Refugees from Ukraine recorded across Europe (total)', stat: shortenNumFormat(regionalData['#affected+refugees']), indicator: '#affected+refugees'});
-  createFigure(humImpactDiv, {className: 'idps', title: 'Internally Displaced People (estimated)', stat: shortenNumFormat(data['#affected+idps']), indicator: '#affected+idps'});
-  createFigure(humImpactDiv, {className: 'casualties-killed', title: 'Civilian Casualties - Killed', stat: numFormat(data['#affected+killed']), indicator: '#affected+killed'});
-  createFigure(humImpactDiv, {className: 'returnees', title: 'Estimated Number of Returnees', stat: shortenNumFormat(data['#affected+returnees+ind']), indicator: '#affected+returnees+ind'});
   createFigure(humImpactDiv, {className: 'people-reached', title: 'People reached within Ukraine (total)', stat: shortenNumFormat(data['#reached+ind']), indicator: '#reached+ind'});
+  createFigure(humImpactDiv, {className: 'casualties-killed', title: 'Civilian Casualties - Killed', stat: numFormat(data['#affected+killed']), indicator: '#affected+killed'});
+  createFigure(humImpactDiv, {className: 'casualties-injured', title: 'Civilian Casualties - Injured', stat: numFormat(data['#affected+injured']), indicator: '#affected+injured'});
+  createFigure(humImpactDiv, {className: 'refugees', title: 'Refugees from Ukraine recorded across Europe (total)', stat: shortenNumFormat(regionalData['#affected+refugees']), indicator: '#affected+refugees'});
+  createFigure(humImpactDiv, {className: 'returnees', title: 'Estimated Number of Returnees', stat: shortenNumFormat(data['#affected+returnees+ind']), indicator: '#affected+returnees+ind'});
+  createFigure(humImpactDiv, {className: 'idps', title: 'Internally Displaced People (estimated)', stat: shortenNumFormat(data['#affected+idps']), indicator: '#affected+idps'});
   createFigure(humImpactDiv, {className: 'orgs', title: 'Humanitarian orgs present within Ukraine (total)', stat: numFormat(data['#org+count+num']), indicator: '#org+count+num'});
   // createFigure(humImpactDiv, {className: 'attacks-health', title: 'Attacks on Health Care', stat: numFormat(data['#indicator+attacks+healthcare+num']), indicator: '#indicator+attacks+healthcare+num'});
   // createFigure(humImpactDiv, {className: 'attacks-education', title: 'Attacks on Education Facilities', stat: numFormat(data['#indicator+attacks+education+num']), indicator: '#indicator+attacks+education+num'});
@@ -1637,18 +1643,21 @@ $( document ).ready(function() {
 
       //map humanitarian icons to sector clusters
       humIcons = {
-        'Camp Coordination & Camp Management': 'humanitarianicons-Coordination',
-        'Coordination and Common Services': 'humanitarianicons-Coordination',
+        'Child Protection': 'humanitarianicons-Child-protection',
         'Education': 'humanitarianicons-Education',
+        'Camp Coordination and Camp Management': 'humanitarianicons-Coordination',
+        'Coordination and Common Services': 'humanitarianicons-Coordination',
         'Emergency Telecommunications': 'humanitarianicons-Emergency-Telecommunications',
         'Food Security and Livelihoods': 'humanitarianicons-Food-Security',
+        'Gender-Based Violence': 'humanitarianicons-Sexual-violence',
+        'General Protection': 'humanitarianicons-Protection',
         'Health': 'humanitarianicons-Health',
         'Logistics': 'humanitarianicons-Logistics',
-        'Multi-purpose Cash': 'humanitarianicons-Fund',
+        'Mine Action': 'humanitarianicons-Mine',
+        'Multi-Purpose Cash': 'humanitarianicons-Fund',
         'Nutrition': 'fa-solid fa-person-breastfeeding',
-        'Protection': 'humanitarianicons-Protection',
-        'Shelter/NFI': 'humanitarianicons-Shelter',
-        'WASH': 'humanitarianicons-Water-Sanitation-and-Hygiene',
+        'Shelter and Non-Food Items': 'humanitarianicons-Shelter',
+        'Water, Sanitation and Hygiene': 'humanitarianicons-Water-Sanitation-and-Hygiene',
       };
 
 
