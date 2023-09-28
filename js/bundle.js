@@ -341,7 +341,7 @@ function initMap() {
   console.log('Loading map...')
   map = new mapboxgl.Map({
     container: 'global-map',
-    style: 'mapbox://styles/humdata/cl0cqcpm4002014utgdbhcn4q?draft=true',
+    style: 'mapbox://styles/humdata/cl0cqcpm4002014utgdbhcn4q',
     center: [-25, 0],
     minZoom: minZoom,
     zoom: zoomLevel,
