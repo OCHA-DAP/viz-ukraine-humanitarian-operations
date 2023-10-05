@@ -584,9 +584,9 @@ function initCountryLayer() {
   map.on('mousemove', countryLayer, function(e) {  
     if (currentCountryIndicator.id!='#acled+events') {
       var f = map.queryRenderedFeatures(e.point)[0];
-      if (f.properties.ADM0_PCODE!=undefined && f.properties.ADM0_EN==currentCountry.name) {
+      if (f.properties.ADM0_PCODE!=undefined && f.properties.ADM0_REF==currentCountry.name) {
         map.getCanvas().style.cursor = 'pointer';
-        if (f.layer.id!='hostilities-layer') createCountryMapTooltip(f.properties.ADM1_EN, f.properties.ADM1_PCODE, e.point);
+        if (f.layer.id!='hostilities-layer') createCountryMapTooltip(f.properties.ADM0_REF, f.properties.ADM1_PCODE, e.point);
         tooltip
           .addTo(map)
           .setLngLat(e.lngLat);
