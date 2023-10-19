@@ -519,7 +519,7 @@ function createEvents() {
 
 function selectCountry(features) {
   //set first country indicator
-  $('#affected+inneed+idps').prop('checked', true);
+  $('#affected+idps').prop('checked', true);
   currentCountryIndicator = {
     id: $('input[name="countryIndicators"]:checked').val(), 
     name: $('input[name="countryIndicators"]:checked').parent().text()
@@ -1050,7 +1050,7 @@ function updateCountryLayer() {
     case '#population':
       clrRange = populationColorRange;
       break;
-    case '#affected+inneed+idps':
+    case '#affected+idps':
       clrRange = idpColorRange;
       break;
     case '#org+count+num':
@@ -1071,7 +1071,7 @@ function updateCountryLayer() {
       .domain(['Battles', 'Explosions/Remote violence', 'Riots', 'Violence against civilians'])
       .range(eventColorRange);
   }
-  else if (currentCountryIndicator.id=='#affected+inneed+idps') {
+  else if (currentCountryIndicator.id=='#affected+idps') {
     $('.no-data-key').show();
     $('.map-legend.country').addClass('idps');
 
@@ -1166,7 +1166,7 @@ function resetLayers() {
 function createCountryLegend(scale) {
   //set data sources
   createSource($('.map-legend.country .pin-source'), '#affected+inneed+total');
-  createSource($('.map-legend.country .idp-source'), '#affected+inneed+idps');
+  createSource($('.map-legend.country .idp-source'), '#affected+idps');
   createSource($('.map-legend.country .acled-source'), '#date+latest+acled');
   createSource($('.map-legend.country .orgs-source'), '#org+count+num');
   createSource($('.map-legend.country .population-source'), '#population');
@@ -1212,7 +1212,7 @@ function createCountryLegend(scale) {
 
 function updateCountryLegend(scale) {
   //set format for legend format
-  let legendFormat = (currentCountryIndicator.id=='#affected+inneed+idps' || currentCountryIndicator.id=='#population' || currentCountryIndicator.id=='#affected+inneed+total') ? shortenNumFormat : d3.format('.0f');
+  let legendFormat = (currentCountryIndicator.id=='#affected+idps' || currentCountryIndicator.id=='#population' || currentCountryIndicator.id=='#affected+inneed+total') ? shortenNumFormat : d3.format('.0f');
 
   //set legend title
   let legendTitle = $('input[name="countryIndicators"]:checked').attr('data-legend');
@@ -1285,7 +1285,7 @@ function createCountryMapTooltip(adm1_name, adm1_pcode, point) {
     if (val!=undefined && val!='' && !isNaN(val)) {
       if (currentCountryIndicator.id.indexOf('pct')>-1) val = (val>1) ? percentFormat(1) : percentFormat(val);
       if (currentCountryIndicator.id=='#population') val = shortenNumFormat(val);
-      if (currentCountryIndicator.id=='#affected+inneed+idps' || currentCountryIndicator.id=='#loc+count+health') val = numFormat(val);
+      if (currentCountryIndicator.id=='#affected+idps' || currentCountryIndicator.id=='#loc+count+health') val = numFormat(val);
       if (currentCountryIndicator.id=='#org+count+num') label = 'Humanitarian organizations present';
     }
     else {
@@ -1313,7 +1313,7 @@ function createCountryMapTooltip(adm1_name, adm1_pcode, point) {
       content += `<div class="table-display">`;
       content += `<div class="table-row"><div>People Affected:</div><div>${numFormat(adm1[0]['#affected+total'])}</div></div>`;
       content += `<div class="table-row"><div>People Targeted:</div><div>${numFormat(adm1[0]['#targeted+total'])}</div></div>`;
-      content += `<div class="table-row"><div>IDPs in Need:</div><div>${numFormat(adm1[0]['#affected+inneed+idps'])}</div></div>`;
+      content += `<div class="table-row"><div>IDPs in Need:</div><div>${numFormat(adm1[0]['#affected+idps'])}</div></div>`;
       content += `<div class="table-row"><div>Non-displaced People in Need:</div><div>${numFormat(adm1[0]['#affected+inneed+nondisplaced'])}</div></div>`;
       content += `<div class="table-row"><div>Returnees in Need:</div><div>${numFormat(adm1[0]['#affected+inneed+returnees'])}</div></div>`;
       content += `</div>`;
