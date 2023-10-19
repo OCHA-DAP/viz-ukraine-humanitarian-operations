@@ -519,7 +519,7 @@ function createEvents() {
 
 function selectCountry(features) {
   //set first country indicator
-  $('#affected+idps').prop('checked', true);
+  $('#affected+inneed+idps').prop('checked', true);
   currentCountryIndicator = {
     id: $('input[name="countryIndicators"]:checked').val(), 
     name: $('input[name="countryIndicators"]:checked').parent().text()
@@ -571,9 +571,8 @@ function initCountryLayer() {
   countryColorScale = d3.scaleQuantize().domain([0, 1]).range(colorRange);
   createCountryLegend(countryColorScale);
 
-  initIDPLayer();
+  //initIDPLayer();
   initBorderCrossingLayer();
-  //initHostilityLayer();
   initLocationLabels();
   initAcledLayer();
   initRefugeeLayer();
@@ -584,7 +583,6 @@ function initCountryLayer() {
   map.on('mousemove', countryLayer, function(e) {  
     if (currentCountryIndicator.id!='#acled+events') {
       var f = map.queryRenderedFeatures(e.point)[0];
-      console.log(f.properties)
       if (f.properties.ADM0_PCODE!=undefined && f.properties.ADM0_REF==currentCountry.name) {
         map.getCanvas().style.cursor = 'pointer';
         if (f.layer.id!='hostilities-layer') createCountryMapTooltip(f.properties.ADM1_REF, f.properties.ADM1_PCODE, e.point);
@@ -1052,7 +1050,7 @@ function updateCountryLayer() {
     case '#population':
       clrRange = populationColorRange;
       break;
-    case '#affected+idps':
+    case '#affected+inneed+idps':
       clrRange = idpColorRange;
       break;
     case '#org+count+num':
@@ -1073,12 +1071,12 @@ function updateCountryLayer() {
       .domain(['Battles', 'Explosions/Remote violence', 'Riots', 'Violence against civilians'])
       .range(eventColorRange);
   }
-  else if (currentCountryIndicator.id=='#affected+idps') {
+  else if (currentCountryIndicator.id=='#affected+inneed+idps') {
     $('.no-data-key').show();
     $('.map-legend.country').addClass('idps');
 
-    let max = d3.max(idpGeoJson.features, function(d) { return +d.properties.idpPresence; });
-    countryColorScale = d3.scaleQuantize().domain([0, max]).range(idpColorRange);
+    // let max = d3.max(idpGeoJson.features, function(d) { return +d.properties.idpPresence; });
+    // countryColorScale = d3.scaleQuantize().domain([0, max]).range(idpColorRange);
   }
   else if (currentCountryIndicator.id=='#org+count+num') {
     $('.no-data-key').show();
@@ -1146,13 +1144,11 @@ function updateCountryLayer() {
     map.setLayoutProperty('acled-dots', 'visibility', 'visible');
     map.setLayoutProperty('border-crossings-layer', 'visibility', 'none');
     map.setLayoutProperty('border-crossings-closed-layer', 'visibility', 'none');
-    //map.setLayoutProperty('hostilities-layer', 'visibility', 'none');
   }
-  else if (currentCountryIndicator.id=='#affected+idps') {
-    resetLayers();
-    map.setLayoutProperty(countryLayer, 'visibility', 'none');
-    map.setLayoutProperty('macro-regions', 'visibility', 'visible');
-  }
+  // else if (currentCountryIndicator.id=='#affected+idps') {
+  //   resetLayers();
+  //   map.setLayoutProperty(countryLayer, 'visibility', 'none');
+  // }
   else {
     resetLayers();
   }
@@ -1164,19 +1160,16 @@ function resetLayers() {
   map.setLayoutProperty('acled-dots', 'visibility', 'none');
   map.setLayoutProperty('border-crossings-layer', 'visibility', 'visible');
   map.setLayoutProperty('border-crossings-closed-layer', 'visibility', 'visible');
-  //map.setLayoutProperty('hostilities-layer', 'visibility', 'visible');
-  map.setLayoutProperty('macro-regions', 'visibility', 'none');
 }
 
 
 function createCountryLegend(scale) {
   //set data sources
   createSource($('.map-legend.country .pin-source'), '#affected+inneed+total');
-  createSource($('.map-legend.country .idp-source'), '#affected+idps');
+  createSource($('.map-legend.country .idp-source'), '#affected+inneed+idps');
   createSource($('.map-legend.country .acled-source'), '#date+latest+acled');
   createSource($('.map-legend.country .orgs-source'), '#org+count+num');
   createSource($('.map-legend.country .population-source'), '#population');
-  //createSource($('.map-legend.country .hostilities-source'), '#event+loc');
   createSource($('.map-legend.country .health-facilities-source'), '#loc+count+health');
   createSource($('.map-legend.country .refugee-arrivals-source'), '#affected+refugees');
   createSource($('.map-legend.country .border-crossing-source'), '#geojson');
@@ -1219,7 +1212,7 @@ function createCountryLegend(scale) {
 
 function updateCountryLegend(scale) {
   //set format for legend format
-  let legendFormat = (currentCountryIndicator.id=='#affected+idps' || currentCountryIndicator.id=='#population' || currentCountryIndicator.id=='#affected+inneed+total') ? shortenNumFormat : d3.format('.0f');
+  let legendFormat = (currentCountryIndicator.id=='#affected+inneed+idps' || currentCountryIndicator.id=='#population' || currentCountryIndicator.id=='#affected+inneed+total') ? shortenNumFormat : d3.format('.0f');
 
   //set legend title
   let legendTitle = $('input[name="countryIndicators"]:checked').attr('data-legend');
@@ -1292,7 +1285,7 @@ function createCountryMapTooltip(adm1_name, adm1_pcode, point) {
     if (val!=undefined && val!='' && !isNaN(val)) {
       if (currentCountryIndicator.id.indexOf('pct')>-1) val = (val>1) ? percentFormat(1) : percentFormat(val);
       if (currentCountryIndicator.id=='#population') val = shortenNumFormat(val);
-      if (currentCountryIndicator.id=='#affected+idps' || currentCountryIndicator.id=='#loc+count+health') val = numFormat(val);
+      if (currentCountryIndicator.id=='#affected+inneed+idps' || currentCountryIndicator.id=='#loc+count+health') val = numFormat(val);
       if (currentCountryIndicator.id=='#org+count+num') label = 'Humanitarian organizations present';
     }
     else {
