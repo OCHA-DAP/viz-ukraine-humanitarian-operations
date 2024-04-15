@@ -536,7 +536,7 @@ a:visited {
 	overflow: hidden;
 	padding: 20px 30px 30px;
 	position: absolute;
-	top: 0;
+	top: 60px;
 	left: 0;
 	width: 416px;
 	z-index: 3;
@@ -853,6 +853,20 @@ a:visited {
   }
 }
 
+.alert-message {
+	background-color: #FDE9E8;
+	border: 1px solid #F2645A;
+	color: #000;
+	font-size: 16px;
+	text-align: center;
+	a {
+		color: #F2645A;
+	}
+	p {
+		margin: 0;
+		padding: 20px;
+	}
+}
 
 //accessibility helper class
 .visuallyhidden {
