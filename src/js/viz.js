@@ -37,7 +37,7 @@ $( document ).ready(function() {
   var tooltip = d3.select('.tooltip');
   var minWidth = 1000;
   viewportWidth = (window.innerWidth<minWidth) ? minWidth : window.innerWidth;
-  viewportHeight = window.innerHeight - 60;
+  viewportHeight = window.innerHeight;
 
 
   function init() {
