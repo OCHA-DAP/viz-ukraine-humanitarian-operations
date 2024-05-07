@@ -1551,7 +1551,7 @@ a:visited {
   overflow: hidden;
   padding: 20px 30px 30px;
   position: absolute;
-  top: 60px;
+  top: 0;
   left: 0;
   width: 416px;
   z-index: 3;
